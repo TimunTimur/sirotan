@@ -41,7 +41,8 @@ function handleEvent(event) {
         console.log(event);
 
         // ignore non-text-message event
-        return Promise.resolve(true);
+        //return Promise.resolve(true);
+        return client.replyMessage(event.replyToken, event.message);
     }
 
    return Promise.resolve(null);
