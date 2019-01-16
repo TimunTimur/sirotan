@@ -17,8 +17,8 @@ const config = {
 // create Express app
 // about Express: https://expressjs.com/
 
-const app = express()
-    .post('/webhook', line.middleware(config), (req, res) => {
+const app = express();
+    /* .post('/webhook', line.middleware(config), (req, res) => {
         //console.log(req);
         Promise
            .all(req.body.events.map(handleEvent))
@@ -30,12 +30,23 @@ const app = express()
     })
     .listen(port, () => {
         console.log(`listening on ${port}`);
-    });
+    }); */
 
-const SocketServer = WebSocket.Server;
+app.post('/webhook', line.middleware(config), (req, res) => {
+    //console.log(req);
+    Promise
+       .all(req.body.events.map(handleEvent))
+       .then((result) => res.json(result))
+       .catch((err) => {
+        console.error(err);
+        res.status(500).end();
+    });
+})
+
+/* const SocketServer = WebSocket.Server;
 const wss = new SocketServer({
     app
-});
+}); */
 
 
 // event handler
@@ -69,4 +80,8 @@ function handleEvent(event) {
        // use reply API
        return client.replyMessage(event.replyToken, answer);
    }) */
+
+app.listen(port, () => {
+    console.log(`listening on ${port}`);
+});
 }
