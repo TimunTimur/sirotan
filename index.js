@@ -24,10 +24,29 @@ const client = new line.Client(config);
 
 // create Express app
 // about Express: https://expressjs.com/
-const app = express();
+
+const app = express()
+    .post('/webhook', line.middleware(config), (req, res) => {
+        //console.log(req);
+        Promise
+           .all(req.body.events.map(handleEvent))
+           .then((result) => res.json(result))
+           .catch((err) => {
+            console.error(err);
+            res.status(500).end();
+        });
+    })
+    .listen(port, () => {
+        console.log(`listening on ${port}`);
+    });
+
+const SocketServer = WebSocket.Server;
+const wss = new SocketServer({
+    app
+});
 
 // register a webhook handler with middleware
-app.post('/webhook', line.middleware(config), (req, res) => {
+/* app.post('/webhook', line.middleware(config), (req, res) => {
     //console.log(req);
     Promise
        .all(req.body.events.map(handleEvent))
@@ -36,7 +55,7 @@ app.post('/webhook', line.middleware(config), (req, res) => {
         console.error(err);
         res.status(500).end();
     });
-});
+}); */
 
 // event handler
 function handleEvent(event) {
@@ -82,5 +101,3 @@ const port = process.env.PORT || 3000;
 app.listen(port, () => {
    console.log(`listening on ${port}`);
 });
-
-const wss = new WebSocket.Server({ app });
