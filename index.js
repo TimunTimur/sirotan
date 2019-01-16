@@ -80,8 +80,8 @@ function handleEvent(event) {
        // use reply API
        return client.replyMessage(event.replyToken, answer);
    }) */
+}
 
 app.listen(port, () => {
     console.log(`listening on ${port}`);
 });
-}
