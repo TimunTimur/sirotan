@@ -4,7 +4,8 @@ const express = require('express');
 const WebSocket = require('ws');
 var request = require("request");
 
-const wss = new WebSocket.Server({ port: process.env.PORT || 8080 });
+const port2 = process.env.PORT || 3000;
+const wss = new WebSocket.Server({ port: port2 });
 
 wss.on('connection', function connection(ws) {
     console.log(ws);
@@ -68,7 +69,7 @@ function handleEvent(event) {
    }) */
 }
 
-// listen on port number
+// listen on port
 
 const port = process.env.PORT || 3000;
 app.listen(port, () => {
