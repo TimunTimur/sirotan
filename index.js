@@ -33,7 +33,7 @@ function handleEvent(event) {
    if (event.type == 'message' || event.message.type == 'text') {
        console.log(event);
        // ignore non-text-message event
-       return client.replyMessage(event.replyToken, event.message.text);
+       return Promise.resolve(true);
    }
 
    return Promise.resolve(null);
