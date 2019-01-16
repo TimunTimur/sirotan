@@ -12,7 +12,7 @@ const config = {
 };
 
 // create LINE SDK client
-//const client = new line.Client(config);
+const client = new line.Client(config);
 
 // create Express app
 // about Express: https://expressjs.com/
