@@ -7,7 +7,12 @@ var request = require("request");
 const wss = new WebSocket.Server({ port: 8080 });
 
 wss.on('connection', function connection(ws) {
-    console.log(ws);
+    ws.on('message', function incoming(message) {
+        console.log('received: %s', message);
+    });
+    
+    ws.send('something');
+    //console.log(ws);
 });
 
 // create LINE SDK config from env variables
