@@ -3,15 +3,7 @@ const line = require('@line/bot-sdk');
 const express = require('express');
 const WebSocket = require('ws');
 var request = require("request");
-
-/* wss.on('connection', function connection(ws) {
-    ws.on('message', function incoming(message) {
-        console.log('received: %s', message);
-    });
-    
-    ws.send('something');
-    //console.log(ws);
-}); */
+const port = process.env.PORT || 5000;
 
 // create LINE SDK config from env variables
 const config = {
@@ -20,7 +12,7 @@ const config = {
 };
 
 // create LINE SDK client
-const client = new line.Client(config);
+//const client = new line.Client(config);
 
 // create Express app
 // about Express: https://expressjs.com/
@@ -45,28 +37,12 @@ const wss = new SocketServer({
     app
 });
 
-// register a webhook handler with middleware
-/* app.post('/webhook', line.middleware(config), (req, res) => {
-    //console.log(req);
-    Promise
-       .all(req.body.events.map(handleEvent))
-       .then((result) => res.json(result))
-       .catch((err) => {
-        console.error(err);
-        res.status(500).end();
-    });
-}); */
 
 // event handler
 function handleEvent(event) {
     if (event.type == 'message' || event.message.type == 'text') {
         console.log(event);
 
-        wss.on('connection', function connection(ws) {
-            console.log(ws);
-        });
-
-        // ignore non-text-message event
         //return Promise.resolve(true);
         return client.replyMessage(event.replyToken, event.message);
     }
@@ -94,10 +70,3 @@ function handleEvent(event) {
        return client.replyMessage(event.replyToken, answer);
    }) */
 }
-
-// listen on port
-
-const port = process.env.PORT || 3000;
-app.listen(port, () => {
-   console.log(`listening on ${port}`);
-});
