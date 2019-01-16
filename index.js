@@ -1,7 +1,14 @@
 'use strict';
 const line = require('@line/bot-sdk');
 const express = require('express');
+const WebSocket = require('ws');
 var request = require("request");
+
+const wss = new WebSocket.Server({ port: process.env.PORT || 8080 });
+
+wss.on('connection', function connection(ws) {
+    console.log(ws);
+});
 
 // create LINE SDK config from env variables
 const config = {
@@ -30,11 +37,20 @@ app.post('/webhook', line.middleware(config), (req, res) => {
 
 // event handler
 function handleEvent(event) {
-   if (event.type == 'message' || event.message.type == 'text') {
-       console.log(event);
-       // ignore non-text-message event
-       return Promise.resolve(true);
-   }
+    if (event.type == 'message' || event.message.type == 'text') {
+        console.log(event);
+        
+        ws.on('open', function open() {
+            ws.send('something');
+        });
+        
+        ws.on('message', function incoming(data) {
+            console.log(data);
+        });
+
+        // ignore non-text-message event
+        return Promise.resolve(true);
+    }
 
    return Promise.resolve(null);
    /* var options = {
